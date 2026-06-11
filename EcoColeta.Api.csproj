@@ -10,6 +10,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="EcoColeta.Tests\**" />
+    <Content Remove="EcoColeta.Tests\**" />
+    <EmbeddedResource Remove="EcoColeta.Tests\**" />
+    <None Remove="EcoColeta.Tests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.22" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.22">
       <PrivateAssets>all</PrivateAssets>

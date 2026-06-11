@@ -4,7 +4,7 @@ namespace EcoColeta.Api.Services.Interfaces
 {
     public interface IPontoColetaService
     {
-        Task<IEnumerable<PontoColeta>> GetAllAsync();
+        Task<IEnumerable<PontoColeta>> GetAllAsync(int pageNumber, int pageSize);
 
         Task<PontoColeta?> GetByIdAsync(int id);
 

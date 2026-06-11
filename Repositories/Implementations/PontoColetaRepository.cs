@@ -14,9 +14,13 @@ namespace EcoColeta.Api.Repositories.Implementations
             _context = context;
         }
 
-        public async Task<IEnumerable<PontoColeta>> GetAllAsync()
+        public async Task<IEnumerable<PontoColeta>> GetAllAsync(int pageNumber, int pageSize)
         {
-            return await _context.PontosColeta.ToListAsync();
+            return await _context.PontosColeta
+                .OrderBy(p => p.IdPontoColeta)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
         }
 
         public async Task<PontoColeta?> GetByIdAsync(int id)

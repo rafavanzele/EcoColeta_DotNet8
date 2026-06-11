@@ -1,6 +1,8 @@
 ﻿# EcoColeta API
 
 API REST desenvolvida em .NET 8 para gerenciamento de resíduos, pontos de coleta e coletas realizadas.
+O projeto está alinhado ao tema ESG "Gestão de Resíduos e Reciclagem", promovendo o controle de resíduos, 
+pontos de coleta e registros de coletas realizadas.
 
 Projeto acadêmico desenvolvido para praticar conceitos de:
 
@@ -20,22 +22,28 @@ Projeto acadêmico desenvolvido para praticar conceitos de:
 ## Funcionalidades:
 - Tipo de Resíduo
 Listar tipos de resíduos
-Buscar por ID
+Buscar tipo de residuo por ID
 Cadastrar novo tipo
 Atualizar tipo existente
 Excluir tipo
+
 - Ponto de Coleta
 Listar pontos de coleta
-Buscar por ID
+Buscar ponto de coleta por ID
 Cadastrar novo ponto
 Atualizar ponto existente
 Excluir ponto
+
 - Coleta de Resíduos
 Listar coletas
-Buscar por ID
+Buscar coleta por ID
 Registrar coleta
 Atualizar coleta
 Excluir coleta
+
+Listar tipos de resíduos (com paginação)
+Listar pontos de coleta (com paginação)
+Listar coletas (com paginação)
 
 ## Arquitetura:
 O projeto segue uma arquitetura em camadas:
@@ -52,7 +60,6 @@ SQL Server
 
 
 ## Estrutura principal:
-
 EcoColeta.Api
 │
 ├── Controllers
@@ -72,6 +79,13 @@ EcoColeta.Api
 - Swagger/OpenAPI
 - Insomnia
 - Docker Desktop
+- Middleware para Tratamento Global de Exceções
+- Service Layer
+- Injeção de dependência
+- Data Annotations para validação de modelos
+- xUnit
+- Basic Authentication
+- Authorization com proteção de endpoints críticos
 
 ## Validações Implementadas:
 - TipoResiduo
@@ -101,6 +115,10 @@ Exemplo de retorno 500
   "mensagem": "Ocorreu um erro interno no servidor."
 }
 
+## Testes
+O projeto possui testes unitários utilizando xUnit para validação dos endpoints principais.
+Foram implementados testes de integração para verificar o retorno HTTP Status Code 200 dos endpoints de listagem, 
+conforme solicitado no enunciado da atividade.
 
 ## Documentação Swagger:
 Ao executar a aplicação:
@@ -159,5 +177,5 @@ dotnet run
 - Rafael Vanzele Gomes
 - Aluno de Análise e Desenvolvimento de Sistemas - FIAP
 
-## GitHub:
-@rafavanzele
+Repositório:
+https://github.com/rafavanzele/EcoColeta_DotNet8

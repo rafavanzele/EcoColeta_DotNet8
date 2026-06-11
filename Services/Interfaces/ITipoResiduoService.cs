@@ -4,7 +4,7 @@ namespace EcoColeta.Api.Services.Interfaces
 {
     public interface ITipoResiduoService
     {
-        Task<IEnumerable<TipoResiduo>> GetAllAsync();
+        Task<IEnumerable<TipoResiduo>> GetAllAsync(int pageNumber, int pageSize);
 
         Task<TipoResiduo?> GetByIdAsync(int id);
 

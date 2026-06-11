@@ -4,7 +4,7 @@ namespace EcoColeta.Api.Repositories.Interfaces
 {
     public interface IColetaResiduoRepository
     {
-        Task<IEnumerable<ColetaResiduo>> GetAllAsync();
+        Task<IEnumerable<ColetaResiduo>> GetAllAsync(int pageNumber, int pageSize);
 
         Task<ColetaResiduo?> GetByIdAsync(int id);
 

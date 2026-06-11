@@ -14,9 +14,12 @@ namespace EcoColeta.Api.Repositories.Implementations
             _context = context;
         }
 
-        public async Task<IEnumerable<TipoResiduo>> GetAllAsync()
+        public async Task<IEnumerable<TipoResiduo>> GetAllAsync(int pageNumber, int pageSize)
         {
-            return await _context.TiposResiduos.ToListAsync();
+            return await _context.TiposResiduos
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
         }
 
         public async Task<TipoResiduo?> GetByIdAsync(int id)

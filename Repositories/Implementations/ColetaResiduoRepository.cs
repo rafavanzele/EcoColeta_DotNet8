@@ -14,11 +14,14 @@ namespace EcoColeta.Api.Repositories.Implementations
             _context = context;
         }
 
-        public async Task<IEnumerable<ColetaResiduo>> GetAllAsync()
+        public async Task<IEnumerable<ColetaResiduo>> GetAllAsync(int pageNumber, int pageSize)
         {
             return await _context.ColetasResiduos
                 .Include(c => c.PontoColeta)
                 .Include(c => c.TipoResiduo)
+                .OrderBy(c => c.IdColeta)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
         }
 

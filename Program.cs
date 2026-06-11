@@ -5,11 +5,22 @@ using EcoColeta.Api.Services.Implementations;
 using EcoColeta.Api.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using EcoColeta.Api.Middlewares;
+using EcoColeta.Api.Security;
+using Microsoft.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Adiciona suporte aos Controllers da API
 builder.Services.AddControllers();
+
+builder.Services
+    .AddAuthentication("BasicAuthentication")
+    .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>(
+        "BasicAuthentication",
+        null
+    );
+
+builder.Services.AddAuthorization();
 
 // Configura o Entity Framework para utilizar SQL Server
 // A string de conexão será lida do arquivo appsettings.json
@@ -51,6 +62,7 @@ app.UseMiddleware<ExceptionMiddleware>();
 app.UseHttpsRedirection();
 
 // Habilita o sistema de autorização
+app.UseAuthentication();
 app.UseAuthorization();
 
 // Mapeia os endpoints dos Controllers
@@ -58,3 +70,5 @@ app.MapControllers();
 
 // Inicializa a aplicação
 app.Run();
+
+public partial class Program { }

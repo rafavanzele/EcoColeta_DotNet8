@@ -1,6 +1,7 @@
 ﻿using EcoColeta.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using EcoColeta.Api.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EcoColeta.Api.Controllers
 {
@@ -15,11 +16,11 @@ namespace EcoColeta.Api.Controllers
             _service = service;
         }
 
-        
+
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(int pageNumber = 1, int pageSize = 10)
         {
-            var tiposResiduos = await _service.GetAllAsync();
+            var tiposResiduos = await _service.GetAllAsync(pageNumber, pageSize);
 
             return Ok(tiposResiduos);
         }
@@ -39,6 +40,7 @@ namespace EcoColeta.Api.Controllers
         }
 
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(TipoResiduo tipoResiduo)
         {
@@ -48,6 +50,7 @@ namespace EcoColeta.Api.Controllers
         }
 
 
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, TipoResiduo tipoResiduo)
         {
@@ -62,6 +65,7 @@ namespace EcoColeta.Api.Controllers
         }
 
 
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

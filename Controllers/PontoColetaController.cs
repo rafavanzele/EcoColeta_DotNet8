@@ -1,6 +1,7 @@
 ﻿using EcoColeta.Api.Models;
 using EcoColeta.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EcoColeta.Api.Controllers
 {
@@ -16,9 +17,9 @@ namespace EcoColeta.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(int pageNumber = 1, int pageSize = 10)
         {
-            var pontosColeta = await _service.GetAllAsync();
+            var pontosColeta = await _service.GetAllAsync(pageNumber, pageSize);
 
             return Ok(pontosColeta);
         }
@@ -38,6 +39,7 @@ namespace EcoColeta.Api.Controllers
         }
 
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(PontoColeta pontoColeta)
         {
@@ -47,6 +49,7 @@ namespace EcoColeta.Api.Controllers
         }
 
 
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, PontoColeta pontoColeta)
         {
@@ -61,6 +64,7 @@ namespace EcoColeta.Api.Controllers
         }
 
 
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
