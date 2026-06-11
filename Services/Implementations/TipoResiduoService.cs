@@ -1,6 +1,7 @@
 ﻿using EcoColeta.Api.Models;
 using EcoColeta.Api.Repositories.Interfaces;
 using EcoColeta.Api.Services.Interfaces;
+using EcoColeta.Api.Configurations;
 
 namespace EcoColeta.Api.Services.Implementations
 {
@@ -20,7 +21,16 @@ namespace EcoColeta.Api.Services.Implementations
 
         public async Task<TipoResiduo?> GetByIdAsync(int id)
         {
-            return await _repository.GetByIdAsync(id);
+            var tipoResiduo = await _repository.GetByIdAsync(id);
+
+            if (tipoResiduo == null)
+            {
+                throw new RecursoNaoEncontradoException(
+                    $"Tipo de resíduo com ID {id} não encontrado."
+                );
+            }
+
+            return tipoResiduo;
         }
 
         public async Task AddAsync(TipoResiduo tipoResiduo)
@@ -30,11 +40,29 @@ namespace EcoColeta.Api.Services.Implementations
 
         public async Task UpdateAsync(TipoResiduo tipoResiduo)
         {
+            var existente = await _repository.GetByIdAsync(tipoResiduo.IdTipoResiduo);
+
+            if (existente == null)
+            {
+                throw new RecursoNaoEncontradoException(
+                    $"Tipo de resíduo com ID {tipoResiduo.IdTipoResiduo} não encontrado."
+                );
+            }
+
             await _repository.UpdateAsync(tipoResiduo);
         }
 
         public async Task DeleteAsync(int id)
         {
+            var existente = await _repository.GetByIdAsync(id);
+
+            if (existente == null)
+            {
+                throw new RecursoNaoEncontradoException(
+                    $"Tipo de resíduo com ID {id} não encontrado."
+                );
+            }
+
             await _repository.DeleteAsync(id);
         }
     }

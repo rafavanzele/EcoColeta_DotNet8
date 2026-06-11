@@ -32,8 +32,16 @@ namespace EcoColeta.Api.Repositories.Implementations
 
         public async Task UpdateAsync(TipoResiduo tipoResiduo)
         {
-            _context.TiposResiduos.Update(tipoResiduo);
-            await _context.SaveChangesAsync();
+            var existente = await _context.TiposResiduos.FindAsync(tipoResiduo.IdTipoResiduo);
+
+            if (existente != null)
+            {
+                existente.NomeTipo = tipoResiduo.NomeTipo;
+                existente.Descricao = tipoResiduo.Descricao;
+                existente.Reciclavel = tipoResiduo.Reciclavel;
+
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task DeleteAsync(int id)

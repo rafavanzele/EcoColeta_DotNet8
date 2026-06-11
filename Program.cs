@@ -4,6 +4,7 @@ using EcoColeta.Api.Repositories.Interfaces;
 using EcoColeta.Api.Services.Implementations;
 using EcoColeta.Api.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using EcoColeta.Api.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,6 +44,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 // Redireciona automaticamente HTTP para HTTPS
 app.UseHttpsRedirection();
