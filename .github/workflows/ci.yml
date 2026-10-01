@@ -1,0 +1,37 @@
+name: CI - EcoColeta
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build e Testes
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do codigo
+        uses: actions/checkout@v4
+
+      - name: Configurar .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+
+      - name: Restaurar dependencias
+        run: dotnet restore EcoColeta.Api.csproj
+
+      - name: Restaurar dependencias dos testes
+        run: dotnet restore EcoColeta.Tests/EcoColeta.Tests.csproj
+
+      - name: Compilar projeto
+        run: dotnet build EcoColeta.Api.csproj --configuration Release --no-restore
+
+      - name: Executar testes
+        run: dotnet test EcoColeta.Tests/EcoColeta.Tests.csproj --configuration Release --no-restore
