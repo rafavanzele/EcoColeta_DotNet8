@@ -13,6 +13,18 @@ jobs:
     name: Build e Testes
     runs-on: ubuntu-latest
 
+    services:
+      sqlserver:
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        env:
+          ACCEPT_EULA: "Y"
+          MSSQL_SA_PASSWORD: "EcoColeta@123"
+        ports:
+          - 1433:1433
+
+    env:
+      ConnectionStrings__DefaultConnection: "Server=localhost,1433;Database=EcoColetaDb;User Id=sa;Password=EcoColeta@123;TrustServerCertificate=True;"
+
     steps:
       - name: Checkout do codigo
         uses: actions/checkout@v4
@@ -29,6 +41,12 @@ jobs:
 
       - name: Restaurar dependencias dos testes
         run: dotnet restore EcoColeta.Tests/EcoColeta.Tests.csproj
+
+      - name: Instalar ferramenta EF Core
+        run: dotnet tool install --global dotnet-ef --version 8.*
+
+      - name: Aplicar migrations no banco de testes
+        run: dotnet ef database update --project EcoColeta.Api.csproj
 
       - name: Compilar projeto
         run: dotnet build EcoColeta.Api.csproj --configuration Release --no-restore
