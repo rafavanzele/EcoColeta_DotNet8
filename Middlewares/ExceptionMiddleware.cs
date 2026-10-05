@@ -33,8 +33,10 @@ namespace EcoColeta.Api.Middlewares
                     JsonSerializer.Serialize(response)
                 );
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.ToString());
+
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                 context.Response.ContentType = "application/json";
 
