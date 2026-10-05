@@ -43,7 +43,7 @@ namespace EcoColeta.Api.Middlewares
                 var response = new
                 {
                     status = 500,
-                    mensagem = "Ocorreu um erro interno no servidor."
+                    mensagem = ex.Message
                 };
 
                 await context.Response.WriteAsync(
