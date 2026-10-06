@@ -93,6 +93,7 @@ EcoColeta.Api
 - Middleware para tratamento global de exceções
 - Basic Authentication
 - Authorization para proteção de endpoints críticos
+
 ## Validações Implementadas:
 - TipoResiduo
 Nome obrigatório
@@ -167,6 +168,12 @@ O pipeline de CI executa automaticamente a cada push ou pull request realizado n
 - Build da aplicação em configuração Release.
 - Execução automatizada dos testes com xUnit.
 
+### Evidência do pipeline de CI
+
+A execução abaixo demonstra o pipeline de integração contínua concluído com sucesso, incluindo build da aplicação, aplicação das migrations e execução automatizada dos testes.
+
+![Pipeline de CI - Build e Testes](docs/images/ci-build-testes.png)
+
 Além do pipeline de integração contínua, foram configurados workflows de deployment contínuo para os ambientes de staging e produção.
 
 Os deployments são realizados automaticamente por meio do GitHub Actions para aplicações hospedadas no Azure App Service:
@@ -176,6 +183,23 @@ Os deployments são realizados automaticamente por meio do GitHub Actions para a
 
 Os dois ambientes utilizam o Azure SQL Database como banco de dados e possuem configurações independentes no Azure App Service.
 
+### Evidências de deployment
+
+#### Staging
+
+O workflow de staging realiza automaticamente o build e o deployment da aplicação no ambiente `ecocoleta-api-staging` do Azure App Service.
+
+![Deploy em Staging](docs/images/staging-deploy.png)
+
+#### Produção
+
+O workflow de produção realiza automaticamente o build e o deployment da aplicação no ambiente `ecocoleta-api` do Azure App Service.
+
+![Deploy em Produção](docs/images/production-deploy.png)
+
+A API publicada em produção foi validada por meio de uma requisição ao endpoint `/api/TipoResiduo`, confirmando o funcionamento da aplicação e o acesso aos dados persistidos no Azure SQL Database.
+
+![API em Produção](docs/images/production-api-running.png)
 
 ## Containerização
 
@@ -192,6 +216,12 @@ A configuração do Docker Compose utiliza:
 - Variáveis de ambiente para configuração da aplicação e do banco de dados.
 - Volume persistente para os dados do SQL Server.
 - Rede Docker para comunicação entre os serviços.
+
+### Evidência do Docker Compose
+
+A execução abaixo demonstra o ambiente local orquestrado pelo Docker Compose, com os containers da API EcoColeta e do SQL Server em execução simultaneamente.
+
+![Docker Compose em execução](docs/images/docker-compose-running.png)
 
 ### Dockerfile
 
