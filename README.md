@@ -71,22 +71,28 @@ EcoColeta.Api
 ├── Configurations
 └── Migrations
 
-## Tecnologias Utilizadas:
+## Tecnologias Utilizadas
+
 - .NET 8
 - ASP.NET Core Web API
-- Entity Framework Core
-- SQL Server LocalDB
-- Swagger/OpenAPI
-- Insomnia
+- Entity Framework Core 8
+- SQL Server
+- Azure SQL Database
+- Azure App Service
+- GitHub Actions
+- Docker
+- Docker Compose
 - Docker Desktop
-- Middleware para Tratamento Global de Exceções
-- Service Layer
-- Injeção de dependência
-- Data Annotations para validação de modelos
+- Swagger / OpenAPI
+- Insomnia
 - xUnit
+- Repository Pattern
+- Service Layer
+- Injeção de Dependência
+- Data Annotations
+- Middleware para tratamento global de exceções
 - Basic Authentication
-- Authorization com proteção de endpoints críticos
-
+- Authorization para proteção de endpoints críticos
 ## Validações Implementadas:
 - TipoResiduo
 Nome obrigatório
@@ -147,31 +153,117 @@ A documentação interativa permite:
 - Testes de erro
 
 
-## Docker:
-Imagem criada com sucesso utilizando Docker Desktop.
+## Pipeline CI/CD
 
-- Build da imagem:
-docker build -t ecocoleta-api .
+O projeto utiliza GitHub Actions para automatizar o processo de integração e entrega contínua.
 
-- Execução do container:
-docker run -d -p 8080:8080 --name ecocoleta-container ecocoleta-api
+O pipeline de CI executa automaticamente a cada push ou pull request realizado na branch `main` e possui as seguintes etapas:
 
-## *Observação:
-O projeto utiliza:
-- (localdb)\MSSQLLocalDB
-O LocalDB está disponível apenas no ambiente Windows local.
-Para execução completa em Docker é necessário utilizar uma instância SQL Server acessível pelo container.
+- Checkout do código-fonte.
+- Configuração do ambiente .NET.
+- Restauração das dependências da aplicação e dos testes.
+- Inicialização de uma instância SQL Server para o ambiente de testes.
+- Aplicação das migrations do Entity Framework Core.
+- Build da aplicação em configuração Release.
+- Execução automatizada dos testes com xUnit.
 
-## Como Executar o Projeto:
-- Clonar repositório:
+Além do pipeline de integração contínua, foram configurados workflows de deployment contínuo para os ambientes de staging e produção.
+
+Os deployments são realizados automaticamente por meio do GitHub Actions para aplicações hospedadas no Azure App Service:
+
+- **Staging:** `ecocoleta-api-staging`
+- **Produção:** `ecocoleta-api`
+
+Os dois ambientes utilizam o Azure SQL Database como banco de dados e possuem configurações independentes no Azure App Service.
+
+
+## Containerização
+
+A aplicação EcoColeta foi containerizada utilizando Docker, permitindo a criação de um ambiente padronizado e reproduzível para execução da API.
+
+O projeto utiliza um Dockerfile multi-stage baseado nas imagens oficiais do .NET 8. O processo é dividido em etapas de build e publicação da aplicação, gerando ao final uma imagem contendo apenas os componentes necessários para sua execução.
+
+Além da imagem da API, o projeto utiliza Docker Compose para orquestrar os serviços necessários ao ambiente local, permitindo a execução integrada da aplicação e do banco de dados SQL Server.
+
+A configuração do Docker Compose utiliza:
+
+- Serviço da API EcoColeta.
+- Serviço do SQL Server.
+- Variáveis de ambiente para configuração da aplicação e do banco de dados.
+- Volume persistente para os dados do SQL Server.
+- Rede Docker para comunicação entre os serviços.
+
+### Dockerfile
+
+O Dockerfile utiliza uma estratégia multi-stage build, separando as etapas de execução, compilação, publicação e imagem final da aplicação.
+
+```dockerfile
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+USER $APP_UID
+WORKDIR /app
+EXPOSE 8080
+EXPOSE 8081
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG BUILD_CONFIGURATION=Release
+WORKDIR /src
+COPY ["EcoColeta.Api.csproj", "."]
+RUN dotnet restore "./EcoColeta.Api.csproj"
+COPY . .
+WORKDIR "/src/."
+RUN dotnet build "./EcoColeta.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
+
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "./EcoColeta.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "EcoColeta.Api.dll"]
+```
+
+## Como executar localmente com Docker
+
+Para executar a aplicação e o banco de dados localmente utilizando Docker Compose:
+
+1. Clone o repositório:
+
+```bash
 git clone https://github.com/rafavanzele/EcoColeta_DotNet8.git
-- Entrar na pasta:
-cd EcoColeta_DotNet8
-- Restaurar dependências:
-dotnet restore
-- Executar aplicação:
-dotnet run
+```
 
+2. Acesse a pasta do projeto:
+
+```bash
+cd EcoColeta_DotNet8
+```
+
+3. Crie o arquivo `.env` a partir do `.env.example` e defina uma senha forte para o SQL Server:
+
+```env
+SA_PASSWORD=SuaSenhaForteAqui
+```
+
+4. Execute os serviços com Docker Compose:
+
+```bash
+docker compose up --build -d
+```
+
+O Docker Compose realizará o build da API e iniciará os containers da aplicação e do SQL Server.
+
+A API ficará disponível em:
+
+```text
+http://localhost:8080
+```
+
+Para encerrar os containers:
+
+```bash
+docker compose down
+```
 
 ## Autor
 - Rafael Vanzele Gomes
