@@ -191,6 +191,10 @@ O workflow de staging realiza automaticamente o build e o deployment da aplicaç
 
 ![Deploy em Staging](docs/images/staging-deploy.png)
 
+A API publicada em staging foi validada por meio de uma requisição ao endpoint `/api/TipoResiduo`, confirmando o funcionamento da aplicação e o acesso aos dados persistidos no Azure SQL Database.
+
+![API em Staging](docs/images/staging-api-running.png)
+
 #### Produção
 
 O workflow de produção realiza automaticamente o build e o deployment da aplicação no ambiente `ecocoleta-api` do Azure App Service.
