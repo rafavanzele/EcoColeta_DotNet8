@@ -123,8 +123,8 @@ Exemplo de retorno 500
 }
 
 ## Testes
-O projeto possui testes unitários utilizando xUnit para validação dos endpoints principais.
-Foram implementados testes de integração para verificar o retorno HTTP Status Code 200 dos endpoints de listagem, 
+O projeto possui testes automatizados utilizando xUnit, incluindo testes de integração para validação dos endpoints principais.
+Foram implementados testes de integração para verificar o retorno HTTP Status Code 200 dos endpoints de listagem,
 conforme solicitado no enunciado da atividade.
 
 ## Documentação Swagger:
