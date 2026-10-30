@@ -8,6 +8,8 @@ namespace EcoColeta.Api.Repositories.Interfaces
 
         Task<ColetaResiduo?> GetByIdAsync(int id);
 
+        Task<bool> ExistsAsync(int id);
+
         Task AddAsync(ColetaResiduo coletaResiduo);
 
         Task UpdateAsync(ColetaResiduo coletaResiduo);

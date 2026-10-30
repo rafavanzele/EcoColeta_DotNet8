@@ -40,9 +40,9 @@ namespace EcoColeta.Api.Services.Implementations
 
         public async Task UpdateAsync(ColetaResiduo coletaResiduo)
         {
-            var existente = await _repository.GetByIdAsync(coletaResiduo.IdColeta);
+            var existe = await _repository.ExistsAsync(coletaResiduo.IdColeta);
 
-            if (existente == null)
+            if (!existe)
             {
                 throw new RecursoNaoEncontradoException(
                     $"Coleta de resíduo com ID {coletaResiduo.IdColeta} não encontrada."

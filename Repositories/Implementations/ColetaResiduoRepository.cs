@@ -33,6 +33,13 @@ namespace EcoColeta.Api.Repositories.Implementations
                 .FirstOrDefaultAsync(c => c.IdColeta == id);
         }
 
+        public async Task<bool> ExistsAsync(int id)
+        {
+            return await _context.ColetasResiduos
+                .AsNoTracking()
+                .AnyAsync(c => c.IdColeta == id);
+        }
+
         public async Task AddAsync(ColetaResiduo coletaResiduo)
         {
             await _context.ColetasResiduos.AddAsync(coletaResiduo);

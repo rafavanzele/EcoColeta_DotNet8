@@ -1,6 +1,12 @@
-@EcoColeta.Api_HostAddress = http://localhost:5149
+@EcoColeta_Api_HostAddress = https://ecocoleta-api-fdevfchfg4a3amhf.canadacentral-01.azurewebsites.net
 
-GET {{EcoColeta.Api_HostAddress}}/weatherforecast/
-Accept: application/json
+### Criar Tipo de Resíduo
+POST {{EcoColeta_Api_HostAddress}}/api/TipoResiduo
+Authorization: Basic YWRtaW46MTIzNDU2
+Content-Type: application/json
 
-###
+{
+  "nomeTipo": "Plastico",
+  "descricao": "Residuo plastico reciclavel",
+  "reciclavel": true
+}
