@@ -1,4 +1,5 @@
-﻿using EcoColeta.Api.Data;
+﻿using EcoColeta.Api.Configurations;
+using EcoColeta.Api.Data;
 using EcoColeta.Api.Models;
 using EcoColeta.Api.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -36,7 +37,18 @@ namespace EcoColeta.Api.Repositories.Implementations
 
         public async Task UpdateAsync(PontoColeta pontoColeta)
         {
-            _context.PontosColeta.Update(pontoColeta);
+            var existente = await _context.PontosColeta
+                .FindAsync(pontoColeta.IdPontoColeta);
+
+            if (existente == null)
+            {
+                throw new RecursoNaoEncontradoException(
+                    $"Ponto de coleta com ID {pontoColeta.IdPontoColeta} não encontrado."
+                );
+            }
+
+            _context.Entry(existente).CurrentValues.SetValues(pontoColeta);
+
             await _context.SaveChangesAsync();
         }
 
